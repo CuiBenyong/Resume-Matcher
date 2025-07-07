@@ -14,6 +14,9 @@ const Header = () => {
 					<Link href="/overview" className="text-sm text-gray-600 hover:text-gray-900">
 						Overview
 					</Link>
+					<Link href="/resume-generator" className="text-sm text-gray-600 hover:text-gray-900">
+						AI简历生成
+					</Link>
 					<Link href="/signup" className="text-sm text-gray-600 hover:text-gray-900">
 						Sign up
 					</Link>

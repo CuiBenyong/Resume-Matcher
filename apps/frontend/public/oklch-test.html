@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OKLCH 颜色支持测试</title>
+    <style>
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .color-test {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .oklch-test {
+            background-color: oklch(0.7 0.15 180);
+        }
+        
+        .oklch-gradient {
+            background: linear-gradient(135deg, oklch(0.8 0.2 180) 0%, oklch(0.6 0.25 240) 100%);
+        }
+        
+        .fallback-test {
+            background-color: #4a90e2;
+        }
+        
+        .test-info {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .supported {
+            color: green;
+            font-weight: bold;
+        }
+        
+        .not-supported {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>OKLCH 颜色支持测试</h1>
+    
+    <div class="test-info">
+        <h3>浏览器支持检测</h3>
+        <p>OKLCH 支持: <span id="oklch-support"></span></p>
+        <p>用户代理: <span id="user-agent"></span></p>
+    </div>
+    
+    <div class="color-test oklch-test">
+        OKLCH 纯色测试
+        <br>
+        oklch(0.7 0.15 180)
+    </div>
+    
+    <div class="color-test oklch-gradient">
+        OKLCH 渐变测试
+        <br>
+        linear-gradient(135deg, oklch(0.8 0.2 180) 0%, oklch(0.6 0.25 240) 100%)
+    </div>
+    
+    <div class="color-test fallback-test">
+        Fallback 颜色测试
+        <br>
+        #4a90e2 (传统HEX)
+    </div>
+    
+    <div class="test-info">
+        <h3>Canvas 兼容性测试</h3>
+        <canvas id="test-canvas" width="200" height="100" style="border: 1px solid #ccc;"></canvas>
+        <p id="canvas-result"></p>
+    </div>
+    
+    <script>
+        // 检测 OKLCH 支持
+        function checkOKLCHSupport() {
+            try {
+                const testDiv = document.createElement('div');
+                testDiv.style.color = 'oklch(0.7 0.15 180)';
+                document.body.appendChild(testDiv);
+                const computed = window.getComputedStyle(testDiv).color;
+                document.body.removeChild(testDiv);
+                
+                // 如果计算样式包含 oklch 或转换为了 rgb，说明支持
+                const isSupported = computed.includes('oklch') || 
+                                   (computed.includes('rgb') && computed !== 'rgba(0, 0, 0, 0)');
+                
+                return isSupported;
+            } catch (e) {
+                return false;
+            }
+        }
+        
+        // 测试 Canvas 渲染
+        function testCanvasRendering() {
+            const canvas = document.getElementById('test-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            try {
+                // 尝试使用 OKLCH 颜色
+                ctx.fillStyle = 'oklch(0.7 0.15 180)';
+                ctx.fillRect(10, 10, 80, 80);
+                
+                // 检查是否成功渲染
+                const imageData = ctx.getImageData(50, 50, 1, 1);
+                const [r, g, b, a] = imageData.data;
+                
+                if (a > 0) {
+                    return `成功！渲染颜色: rgba(${r}, ${g}, ${b}, ${a/255})`;
+                } else {
+                    return '失败：Canvas 不支持 OKLCH 颜色';
+                }
+            } catch (e) {
+                return `错误：${e.message}`;
+            }
+        }
+        
+        // 更新页面信息
+        document.addEventListener('DOMContentLoaded', function() {
+            const isSupported = checkOKLCHSupport();
+            const supportElement = document.getElementById('oklch-support');
+            
+            if (isSupported) {
+                supportElement.textContent = '支持';
+                supportElement.className = 'supported';
+            } else {
+                supportElement.textContent = '不支持';
+                supportElement.className = 'not-supported';
+            }
+            
+            document.getElementById('user-agent').textContent = navigator.userAgent;
+            
+            // 延迟执行 Canvas 测试，确保页面完全加载
+            setTimeout(() => {
+                document.getElementById('canvas-result').textContent = testCanvasRendering();
+            }, 100);
+        });
+    </script>
+</body>
+</html>

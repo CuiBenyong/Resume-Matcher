@@ -5,6 +5,7 @@ from .exceptions import ProviderError
 from .strategies.wrapper import JSONWrapper, MDWrapper
 from .providers.ollama import OllamaProvider, OllamaEmbeddingProvider
 from .providers.openai import OpenAIProvider, OpenAIEmbeddingProvider
+from .providers.moonshot import MoonshotProvider, MoonshotEmbeddingProvider
 
 
 class AgentManager:
@@ -18,11 +19,19 @@ class AgentManager:
                 self.strategy = JSONWrapper()
         self.model = model
 
-    async def _get_provider(self, **kwargs: Any) -> OllamaProvider | OpenAIProvider:
-        api_key = kwargs.get("openai_api_key", os.getenv("OPENAI_API_KEY"))
-        if api_key:
-            return OpenAIProvider(api_key=api_key)
+    async def _get_provider(self, **kwargs: Any) -> OllamaProvider | OpenAIProvider | MoonshotProvider:
+        # 优先检查 Moonshot API 密钥
+        moonshot_api_key = kwargs.get("moonshot_api_key", os.getenv("MOONSHOT_API_KEY"))
+        if moonshot_api_key:
+            model = kwargs.get("model", "moonshot-v1-8k")
+            return MoonshotProvider(api_key=moonshot_api_key, model=model)
+        
+        # 检查 OpenAI API 密钥
+        openai_api_key = kwargs.get("openai_api_key", os.getenv("OPENAI_API_KEY"))
+        if openai_api_key:
+            return OpenAIProvider(api_key=openai_api_key)
 
+        # 默认使用 Ollama
         model = kwargs.get("model", self.model)
         installed_ollama_models = await OllamaProvider.get_installed_models()
         if model not in installed_ollama_models:
@@ -45,10 +54,19 @@ class EmbeddingManager:
 
     async def _get_embedding_provider(
         self, **kwargs: Any
-    ) -> OllamaEmbeddingProvider | OpenAIEmbeddingProvider:
-        api_key = kwargs.get("openai_api_key", os.getenv("OPENAI_API_KEY"))
-        if api_key:
-            return OpenAIEmbeddingProvider(api_key=api_key)
+    ) -> OllamaEmbeddingProvider | OpenAIEmbeddingProvider | MoonshotEmbeddingProvider:
+        # 优先检查 Moonshot API 密钥
+        moonshot_api_key = kwargs.get("moonshot_api_key", os.getenv("MOONSHOT_API_KEY"))
+        if moonshot_api_key:
+            embedding_model = kwargs.get("embedding_model", "moonshot-embedding-v1")
+            return MoonshotEmbeddingProvider(api_key=moonshot_api_key, embedding_model=embedding_model)
+        
+        # 检查 OpenAI API 密钥
+        openai_api_key = kwargs.get("openai_api_key", os.getenv("OPENAI_API_KEY"))
+        if openai_api_key:
+            return OpenAIEmbeddingProvider(api_key=openai_api_key)
+        
+        # 默认使用 Ollama
         model = kwargs.get("embedding_model", self._model)
         installed_ollama_models = await OllamaProvider.get_installed_models()
         if model not in installed_ollama_models:

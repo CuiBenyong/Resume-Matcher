@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puppeteer 分页测试</title>
+    <style>
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .test-content {
+            white-space: pre-line;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .primary-btn {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        .secondary-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .success-btn {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        button:hover {
+            opacity: 0.8;
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        
+        .status.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <h1>Puppeteer PDF 分页测试</h1>
+    
+    <div class="test-container">
+        <h3>测试内容生成器</h3>
+        <div class="button-group">
+            <button class="primary-btn" onclick="generateShortContent()">生成短内容 (1页)</button>
+            <button class="primary-btn" onclick="generateMediumContent()">生成中等内容 (2-3页)</button>
+            <button class="primary-btn" onclick="generateLongContent()">生成长内容 (4-5页)</button>
+        </div>
+        
+        <div class="button-group">
+            <button class="success-btn" onclick="testCanvasExport()" id="canvas-btn">测试 Canvas 导出</button>
+            <button class="success-btn" onclick="testPuppeteerExport()" id="puppeteer-btn">测试 Puppeteer 导出</button>
+        </div>
+        
+        <div id="status" class="status info">
+            点击上方按钮生成测试内容，然后测试PDF导出功能
+        </div>
+    </div>
+    
+    <div class="test-container">
+        <h3>当前测试内容</h3>
+        <div id="content-display" class="test-content">
+            暂无内容，请先生成测试内容
+        </div>
+    </div>
+    
+    <script>
+        let currentContent = '';
+        
+        function generateShortContent() {
+            currentContent = `# 简历测试 - 短内容
+
+## 个人信息
+姓名：张三
+电话：138-0000-0000
+邮箱：zhangsan@example.com
+地址：北京市朝阳区
+
+## 教育背景
+**北京大学** | 2018-2022 | 计算机科学与技术
+- 主修课程：数据结构、算法设计、操作系统
+- GPA：3.8/4.0
+
+## 工作经验
+**腾讯科技** | 2022-至今 | 前端开发工程师
+- 负责微信小程序开发
+- 参与大型前端项目架构设计`;
+            
+            updateDisplay();
+            updateStatus('已生成短内容 (预计1页)', 'info');
+        }
+        
+        function generateMediumContent() {
+            currentContent = `# 张三 - 高级前端工程师简历
+
+## 个人信息
+- **姓名**：张三
+- **电话**：138-0000-0000
+- **邮箱**：zhangsan@example.com
+- **地址**：北京市朝阳区建国门外大街1号
+- **GitHub**：github.com/zhangsan
+- **LinkedIn**：linkedin.com/in/zhangsan
+
+## 个人简介
+拥有5年前端开发经验的高级工程师，熟练掌握React、Vue、TypeScript等现代前端技术栈。在大型互联网公司有丰富的项目经验，擅长性能优化和架构设计。具备良好的团队协作能力和技术领导经验。
+
+## 教育背景
+**北京大学** | 2016-2020 | 计算机科学与技术 | 本科
+- 主修课程：数据结构与算法、计算机网络、操作系统、数据库系统
+- 主要项目：在线教育平台、电商系统、社交网络应用
+- GPA：3.8/4.0，专业排名前10%
+- 获得奖学金：国家奖学金、校级优秀学生奖学金
+
+## 技能清单
+### 前端技术
+- **编程语言**：JavaScript (ES6+), TypeScript, HTML5, CSS3
+- **框架库**：React, Vue.js, Angular, jQuery
+- **构建工具**：Webpack, Vite, Rollup, Parcel
+- **CSS预处理器**：Sass, Less, Stylus
+- **状态管理**：Redux, Vuex, MobX
+
+### 后端技术
+- **编程语言**：Node.js, Python, Java
+- **数据库**：MySQL, MongoDB, Redis
+- **框架**：Express, Koa, Django, Spring Boot
+
+### 工具与平台
+- **版本控制**：Git, SVN
+- **云服务**：AWS, 阿里云, 腾讯云
+- **容器化**：Docker, Kubernetes
+- **项目管理**：Jira, Trello, 禅道
+
+## 工作经验
+
+### 腾讯科技有限公司 | 2020-至今 | 高级前端开发工程师
+**主要职责：**
+- 负责微信小程序生态的前端架构设计和开发
+- 带领5人前端团队完成多个核心业务模块
+- 参与技术选型和最佳实践制定
+- 负责新人培训和技术分享
+
+**核心项目：**
+1. **微信小程序开发平台**
+   - 技术栈：React + TypeScript + Ant Design
+   - 负责整体架构设计，实现了可视化拖拽编辑器
+   - 性能优化使页面加载时间减少40%
+   - 用户活跃度提升30%
+
+2. **企业微信客户端重构**
+   - 技术栈：Vue 3 + TypeScript + Element Plus
+   - 参与核心模块重构，提升代码复用率
+   - 实现微前端架构，支持多团队并行开发
+   - 代码质量和维护性显著提升
+
+### 字节跳动 | 2018-2020 | 前端开发工程师
+**主要职责：**
+- 参与抖音Web端和移动端H5开发
+- 负责性能监控和优化方案实施
+- 参与前端基础设施建设
+
+**核心项目：**
+1. **抖音创作者平台**
+   - 技术栈：React + Redux + Ant Design
+   - 实现视频上传、编辑、发布等核心功能
+   - 处理大文件上传和断点续传
+   - 支持千万级用户并发访问
+
+2. **移动端H5活动页面框架**
+   - 技术栈：Vue.js + TypeScript + Vant
+   - 开发通用活动页面框架，提升开发效率50%
+   - 实现自动化部署和A/B测试功能
+   - 支持快速搭建营销活动页面
+
+## 项目经验
+
+### 开源项目
+1. **Vue组件库** (GitHub stars: 2.3k)
+   - 基于Vue 3开发的轻量级UI组件库
+   - 支持按需加载和主题定制
+   - 完善的文档和示例代码
+
+2. **前端脚手架工具** (npm下载量: 10k+)
+   - 支持多种前端框架项目初始化
+   - 集成代码规范和自动化工具
+   - 提供丰富的模板选择
+
+### 个人项目
+1. **个人博客系统**
+   - 前端：Next.js + TypeScript + Tailwind CSS
+   - 后端：Node.js + Express + MongoDB
+   - 功能：文章发布、评论系统、标签分类
+   - 特点：支持Markdown编辑，SEO优化
+
+## 获得荣誉
+- 2023年：腾讯技术突破奖
+- 2022年：腾讯优秀员工
+- 2021年：字节跳动技术创新奖
+- 2020年：北京大学优秀毕业生`;
+            
+            updateDisplay();
+            updateStatus('已生成中等内容 (预计2-3页)', 'info');
+        }
+        
+        function generateLongContent() {
+            const mediumContent = `# 张三 - 资深全栈工程师简历
+
+## 个人信息
+- **姓名**：张三
+- **电话**：138-0000-0000
+- **邮箱**：zhangsan@example.com
+- **地址**：北京市朝阳区建国门外大街1号国贸大厦
+- **GitHub**：github.com/zhangsan-fullstack
+- **LinkedIn**：linkedin.com/in/zhangsan-senior
+- **个人网站**：zhangsan.dev
+- **微信**：zhangsan_dev
+
+## 个人简介
+拥有8年全栈开发经验的资深工程师，在前端、后端、移动端和DevOps等多个领域都有深入的技术积累。曾在多家知名互联网公司担任技术负责人，有丰富的大型项目架构设计和团队管理经验。擅长性能优化、系统架构设计，具备优秀的问题解决能力和创新思维。
+
+## 教育背景
+**清华大学** | 2012-2016 | 计算机科学与技术 | 本科 | 学士学位
+- 主修课程：数据结构与算法分析、计算机网络、操作系统原理、数据库系统概论、软件工程、人工智能基础
+- 核心项目：分布式文件系统、机器学习推荐算法、Web搜索引擎、在线教育平台
+- GPA：3.9/4.0，专业排名第2名
+- 获得奖学金：国家奖学金（连续3年）、校级优秀学生奖学金、学术创新奖学金
+- 社团活动：计算机协会技术部部长、ACM竞赛队核心成员
+
+**麻省理工学院 (MIT)** | 2016-2018 | 计算机科学 | 硕士 | 硕士学位
+- 研究方向：分布式系统、机器学习、人机交互
+- 导师：Prof. Robert Morris (6.824分布式系统课程创始人)
+- 主要研究：大规模分布式系统的一致性算法优化
+- 发表论文：在SOSP、OSDI等顶级会议发表3篇一作论文
+- GPA：4.0/4.0，获得院长奖学金
+
+## 技能清单
+
+### 前端技术
+- **编程语言**：JavaScript (ES6+), TypeScript, HTML5, CSS3, WebAssembly
+- **框架库**：React, Vue.js, Angular, Svelte, jQuery, Three.js
+- **构建工具**：Webpack, Vite, Rollup, Parcel, Turbopack, esbuild
+- **CSS技术**：Sass, Less, Stylus, PostCSS, Tailwind CSS, CSS Modules
+- **状态管理**：Redux, Vuex, MobX, Recoil, Zustand
+- **移动端**：React Native, Flutter, Ionic, 微信小程序, 支付宝小程序
+- **测试框架**：Jest, Cypress, Playwright, Testing Library
+
+### 后端技术
+- **编程语言**：Node.js, Python, Java, Go, Rust, C++
+- **Web框架**：Express, Koa, Fastify, Django, Flask, Spring Boot, Gin, Actix
+- **数据库**：MySQL, PostgreSQL, MongoDB, Redis, Elasticsearch, ClickHouse
+- **消息队列**：RabbitMQ, Apache Kafka, Redis Pub/Sub, AWS SQS
+- **微服务**：Spring Cloud, Istio, Envoy, gRPC, GraphQL
+- **API设计**：RESTful API, GraphQL, WebSocket, Server-Sent Events
+
+### DevOps与云服务
+- **容器化**：Docker, Kubernetes, Docker Compose, Helm
+- **CI/CD**：Jenkins, GitLab CI, GitHub Actions, CircleCI, Travis CI
+- **云平台**：AWS, Google Cloud, 阿里云, 腾讯云, Azure
+- **监控**：Prometheus, Grafana, ELK Stack, Jaeger, New Relic
+- **基础设施**：Terraform, Ansible, Chef, Puppet
+
+### 数据科学与AI
+- **机器学习**：TensorFlow, PyTorch, Scikit-learn, XGBoost
+- **数据处理**：Pandas, NumPy, Apache Spark, Apache Flink
+- **可视化**：D3.js, ECharts, Matplotlib, Plotly
+
+## 工作经验
+
+### 阿里巴巴集团 | 2021-至今 | 资深技术专家 (P8)
+**部门**：淘宝技术部 - 用户体验技术团队
+**主要职责**：
+- 负责淘宝主站前端架构升级和性能优化
+- 带领15人前端团队，管理多个核心业务线
+- 制定前端技术标准和最佳实践
+- 参与集团级技术决策和人才培养
+
+**核心项目与成就**：
+
+1. **淘宝主站React 18升级项目** (2023年)
+   - **项目背景**：淘宝主站日均PV 10亿+，React版本老旧影响性能
+   - **技术方案**：设计渐进式升级方案，确保业务零中断
+   - **技术栈**：React 18, Concurrent Features, Suspense, Server Components
+   - **核心贡献**：
+     * 设计并实施微前端架构，支持新老版本共存
+     * 开发自动化迁移工具，将手动迁移时间从3个月缩短到2周
+     * 实现Concurrent Rendering，页面响应速度提升35%
+   - **业务影响**：页面加载时间减少30%，用户停留时间增加15%，转化率提升8%
+
+2. **智能化前端监控平台** (2022年)
+   - **项目背景**：传统监控只能发现问题，无法预测和自动修复
+   - **技术方案**：基于机器学习的异常检测和自动化修复
+   - **技术栈**：Python + TensorFlow + Kafka + ClickHouse + React
+   - **核心功能**：
+     * 实时性能监控，覆盖Core Web Vitals全指标
+     * 基于时间序列分析的异常预测算法
+     * 自动化A/B测试和流量调度
+     * 智能报警系统，减少90%误报
+   - **业务价值**：故障发现时间从平均30分钟缩短到3分钟，可用性提升到99.95%
+
+3. **跨端统一开发平台** (2021-2022年)
+   - **项目背景**：淘宝需要支持Web、iOS、Android、小程序等多端
+   - **技术方案**：基于DSL的跨端统一开发框架
+   - **技术栈**：TypeScript + AST + Babel + 各端运行时
+   - **创新点**：
+     * 设计了声明式UI描述语言，一套代码多端运行
+     * 实现了智能代码分析和优化引擎
+     * 开发了可视化搭建平台，降低开发门槛
+   - **推广效果**：团队开发效率提升60%，代码复用率达到85%
+
+### 腾讯科技有限公司 | 2019-2021 | 高级工程师 (T2-3)
+**部门**：微信事业群 - 基础平台部
+**主要职责**：
+- 负责微信生态前端基础设施建设
+- 参与微信小程序框架核心开发
+- 指导初级工程师技术成长
+
+**核心项目**：
+
+1. **微信小程序性能优化框架** (2020-2021年)
+   - **技术挑战**：小程序启动慢、运行卡顿、内存泄漏
+   - **解决方案**：
+     * 实现预编译优化，启动速度提升50%
+     * 开发智能代码分割工具，首屏渲染时间减少40%
+     * 设计内存管理机制，解决长时间使用卡顿问题
+   - **影响范围**：惠及100万+小程序开发者，覆盖10亿+用户
+
+2. **微信开发者工具重构** (2019-2020年)
+   - **技术栈**：Electron + React + TypeScript + Node.js
+   - **核心功能**：代码编辑、调试、发布、性能分析
+   - **技术亮点**：
+     * 实现了高精度的iOS、Android模拟器
+     * 开发了智能代码补全和错误检测
+     * 集成了自动化测试和CI/CD流程
+   - **用户反馈**：开发效率提升平均45%，bug修复时间减少60%
+
+### 字节跳动 | 2018-2019 | 前端开发工程师 (2-1级)
+**部门**：抖音短视频 - 前端技术团队
+**主要职责**：
+- 参与抖音Web端和移动端H5开发
+- 负责创作者工具的前端实现
+- 参与前端基础组件库建设
+
+**核心项目**：
+
+1. **抖音创作者中心** (2018-2019年)
+   - **项目规模**：支持千万级创作者，日均视频上传100万+
+   - **技术栈**：React + Redux + Ant Design + WebRTC
+   - **核心功能**：
+     * 视频上传和实时转码
+     * 在线视频编辑器（滤镜、特效、音乐）
+     * 数据分析和收益统计
+     * 直播推流和管理
+   - **技术难点**：
+     * 大文件分片上传，支持断点续传和秒传
+     * WebGL实现实时视频特效处理
+     * WebRTC实现低延迟直播推流
+   - **性能优化**：上传成功率99.8%，编辑器渲染60fps稳定运行
+
+2. **移动端H5营销活动框架** (2018年)
+   - **业务需求**：快速搭建各类营销活动页面
+   - **技术方案**：可视化配置 + 组件化开发
+   - **框架特性**：
+     * 拖拽式页面搭建，零代码生成H5
+     * 丰富的动画和交互组件库
+     * 自适应多种屏幕尺寸
+     * 一键发布和A/B测试
+   - **业务价值**：活动页面开发周期从2周缩短到2天，转化率平均提升25%
+
+## 个人项目与开源贡献
+
+### 开源项目维护者
+
+1. **Vue DevTools Enhancement** (GitHub stars: 5.2k+)
+   - **项目简介**：Vue.js官方开发工具的增强版本
+   - **主要贡献**：
+     * 实现了组件性能分析功能
+     * 添加了状态时间旅行调试
+     * 优化了大型应用的调试体验
+   - **社区影响**：月活跃用户50万+，获得Vue.js核心团队认可
+
+2. **React Query Builder** (npm周下载: 15k+)
+   - **技术栈**：TypeScript + React + Jest
+   - **功能特性**：可视化SQL查询构建器，支持复杂条件组合
+   - **设计亮点**：插件化架构，支持自定义操作符和数据类型
+   - **应用场景**：被多家公司用于BI系统和数据分析平台
+
+### 技术博客与分享
+
+1. **个人技术博客** (zhangsan.dev)
+   - **访问量**：月PV 10万+，订阅者5000+
+   - **内容类型**：前端技术深度分析、性能优化实践、架构设计思考
+   - **热门文章**：
+     * 《React Concurrent Mode原理深度解析》(阅读量3万+)
+     * 《微前端架构设计与实践》(阅读量2.5万+)
+     * 《现代前端工程化最佳实践》(阅读量2万+)
+
+2. **技术分享**
+   - **QCon全球软件开发大会**：《大规模前端应用的性能优化实践》
+   - **Vue.js开发者大会**：《Vue 3组合式API最佳实践》
+   - **掘金技术社区**：《现代前端框架设计哲学》
+
+## 荣誉与认证
+
+### 公司荣誉
+- **2023年**：阿里巴巴集团技术突破奖 (集团级最高技术奖项)
+- **2022年**：阿里巴巴优秀技术专家 (年度评选前5%)
+- **2021年**：腾讯技术创新奖 (微信事业群)
+- **2020年**：腾讯优秀员工 (全公司评选前10%)
+- **2019年**：字节跳动技术贡献奖
+
+### 学术成就
+- **论文发表**：在SOSP、OSDI等顶级系统会议发表论文5篇
+- **专利申请**：已获得软件发明专利8项，另有5项正在申请中
+- **技术评审**：担任SIGPLAN、ASPLOS等会议程序委员会委员
+
+### 行业认证
+- **AWS认证解决方案架构师** (专业级)
+- **Google Cloud认证专业架构师**
+- **Kubernetes认证应用开发者 (CKAD)**
+- **Oracle Java认证专家**
+
+## 语言能力
+- **中文**：母语
+- **英语**：熟练 (托福108分，工作语言)
+- **日语**：中等 (JLPT N2水平)
+
+## 兴趣爱好
+- **技术研究**：关注前沿技术发展，活跃于GitHub和Stack Overflow
+- **开源贡献**：业余时间维护多个开源项目，贡献代码超过10万行
+- **技术写作**：定期发布技术文章，帮助开发者解决实际问题
+- **体育运动**：马拉松爱好者，最好成绩3小时15分
+- **音乐**：古典吉他演奏，业余音乐制作
+
+## 职业规划
+希望在技术管理和架构设计方向继续深耕，带领团队打造更优秀的产品，推动整个行业的技术进步。同时希望能够在开源社区有更大的影响力，为全球开发者社区做出更多贡献。
+
+---
+
+**备注**：简历中所涉及的项目数据和技术细节均为真实工作经历，如需了解更多详情，欢迎面试时详细交流。`;
+            
+            currentContent = mediumContent;
+            updateDisplay();
+            updateStatus('已生成长内容 (预计4-5页)', 'info');
+        }
+        
+        function updateDisplay() {
+            document.getElementById('content-display').textContent = currentContent;
+        }
+        
+        function updateStatus(message, type = 'info') {
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+        }
+        
+        async function testCanvasExport() {
+            if (!currentContent) {
+                updateStatus('请先生成测试内容', 'error');
+                return;
+            }
+            
+            const btn = document.getElementById('canvas-btn');
+            btn.disabled = true;
+            btn.textContent = '导出中...';
+            
+            try {
+                updateStatus('正在使用Canvas方案导出PDF...', 'info');
+                
+                // 模拟导出过程（实际项目中这里会调用真实的导出函数）
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                updateStatus('Canvas PDF导出完成！', 'success');
+            } catch (error) {
+                updateStatus(`Canvas导出失败: ${error.message}`, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '测试 Canvas 导出';
+            }
+        }
+        
+        async function testPuppeteerExport() {
+            if (!currentContent) {
+                updateStatus('请先生成测试内容', 'error');
+                return;
+            }
+            
+            const btn = document.getElementById('puppeteer-btn');
+            btn.disabled = true;
+            btn.textContent = '导出中...';
+            
+            try {
+                updateStatus('正在使用Puppeteer方案导出PDF...', 'info');
+                
+                // 准备发送到后端的HTML内容
+                const htmlContent = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="utf-8">
+                        <title>简历测试</title>
+                        <style>
+                            @page { 
+                                size: A4; 
+                                margin: 15mm;
+                            }
+                            body {
+                                font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+                                font-size: 14px;
+                                line-height: 1.6;
+                                color: #333;
+                                margin: 0;
+                                padding: 0;
+                            }
+                            h1 { 
+                                font-size: 24px; 
+                                font-weight: bold; 
+                                margin: 20px 0 16px 0; 
+                                color: #1a1a1a;
+                                page-break-after: avoid;
+                            }
+                            h2 { 
+                                font-size: 20px; 
+                                font-weight: bold; 
+                                margin: 16px 0 12px 0; 
+                                color: #2d2d2d;
+                                page-break-after: avoid;
+                            }
+                            h3 { 
+                                font-size: 16px; 
+                                font-weight: 600; 
+                                margin: 12px 0 8px 0; 
+                                color: #404040;
+                                page-break-after: avoid;
+                            }
+                            p { 
+                                margin: 8px 0;
+                                orphans: 3;
+                                widows: 3;
+                            }
+                            ul, ol { 
+                                margin: 8px 0; 
+                                padding-left: 20px;
+                                page-break-inside: avoid;
+                            }
+                            li { 
+                                margin: 4px 0;
+                                page-break-inside: avoid;
+                            }
+                            strong { font-weight: 600; }
+                            em { font-style: italic; }
+                        </style>
+                    </head>
+                    <body>
+                        ${currentContent.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/^#{3}\s(.+)/gm, '<h3>$1</h3>').replace(/^#{2}\s(.+)/gm, '<h2>$1</h2>').replace(/^#{1}\s(.+)/gm, '<h1>$1</h1>')}
+                    </body>
+                    </html>
+                `;
+                
+                // 发送到后端API
+                const response = await fetch('/api/pdf-export', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        html: htmlContent,
+                        options: {
+                            format: 'A4',
+                            margin: {
+                                top: '15mm',
+                                right: '15mm',
+                                bottom: '15mm',
+                                left: '15mm'
+                            },
+                            printBackground: true,
+                            preferCSSPageSize: true
+                        }
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                // 下载PDF文件
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `puppeteer-test-${Date.now()}.pdf`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                
+                updateStatus('Puppeteer PDF导出完成并已下载！', 'success');
+                
+            } catch (error) {
+                console.error('Puppeteer导出错误:', error);
+                updateStatus(`Puppeteer导出失败: ${error.message}`, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '测试 Puppeteer 导出';
+            }
+        }
+    </script>
+</body>
+</html>

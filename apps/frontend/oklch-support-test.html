@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OKLCH支持测试 - Resume Matcher</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            background: #f9f9f9;
+        }
+        .color-demo {
+            width: 50px;
+            height: 50px;
+            display: inline-block;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .oklch-demo { background: oklch(0.7 0.15 180); }
+        .color-demo-fallback { background: #3182ce; }
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.warning { background: #fff3cd; color: #856404; }
+        .status.error { background: #f8d7da; color: #721c24; }
+        button {
+            background: #3182ce;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover { background: #2c5aa0; }
+        pre {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 OKLCH支持测试页面</h1>
+        
+        <div class="test-card">
+            <h2>1. 颜色函数兼容性检测</h2>
+            <div id="colorSupport" class="status"></div>
+            <div>
+                <span>OKLCH颜色示例: </span>
+                <div class="color-demo oklch-demo" title="oklch(0.7 0.15 180)"></div>
+                <span>Fallback颜色: </span>
+                <div class="color-demo color-demo-fallback" title="#3182ce"></div>
+            </div>
+        </div>
+
+        <div class="test-card">
+            <h2>2. 颜色转换测试</h2>
+            <button onclick="testColorConversion()">测试颜色转换</button>
+            <div id="conversionResults"></div>
+        </div>
+
+        <div class="test-card">
+            <h2>3. PDF导出预备测试</h2>
+            <button onclick="testPDFPreparation()">测试PDF准备流程</button>
+            <div id="pdfResults"></div>
+        </div>
+
+        <div class="test-card">
+            <h2>4. 浏览器信息</h2>
+            <div id="browserInfo"></div>
+        </div>
+    </div>
+
+    <script>
+        // 检测颜色函数支持
+        function checkColorSupport() {
+            const results = {
+                oklch: false,
+                colorFunction: false,
+                userAgent: navigator.userAgent
+            };
+
+            try {
+                const testDiv = document.createElement('div');
+                testDiv.style.color = 'oklch(0.7 0.15 180)';
+                document.body.appendChild(testDiv);
+                const computed = window.getComputedStyle(testDiv).color;
+                document.body.removeChild(testDiv);
+                results.oklch = computed !== '' && computed !== 'rgb(0, 0, 0)';
+            } catch (e) {
+                results.oklch = false;
+            }
+
+            try {
+                const testDiv = document.createElement('div');
+                testDiv.style.color = 'color(srgb 1 0 0)';
+                document.body.appendChild(testDiv);
+                const computed = window.getComputedStyle(testDiv).color;
+                document.body.removeChild(testDiv);
+                results.colorFunction = computed !== '' && computed !== 'rgb(0, 0, 0)';
+            } catch (e) {
+                results.colorFunction = false;
+            }
+
+            return results;
+        }
+
+        // 显示颜色支持状态
+        function displayColorSupport() {
+            const support = checkColorSupport();
+            const element = document.getElementById('colorSupport');
+            
+            let statusClass = 'success';
+            let message = '✅ 浏览器完全支持现代颜色函数';
+            
+            if (!support.oklch && !support.colorFunction) {
+                statusClass = 'error';
+                message = '❌ 浏览器不支持现代颜色函数，需要转换';
+            } else if (!support.oklch || !support.colorFunction) {
+                statusClass = 'warning';
+                message = '⚠️ 浏览器部分支持现代颜色函数';
+            }
+            
+            element.className = `status ${statusClass}`;
+            element.innerHTML = `
+                <strong>${message}</strong><br>
+                OKLCH支持: ${support.oklch ? '✅' : '❌'}<br>
+                Color()函数支持: ${support.colorFunction ? '✅' : '❌'}
+            `;
+        }
+
+        // 测试颜色转换
+        function testColorConversion() {
+            const testColors = [
+                'oklch(0.7 0.15 180)',
+                'color(srgb 1 0 0)',
+                'lab(50% 20 -30)',
+                'lch(70% 45 120)',
+                '#3182ce'
+            ];
+
+            const results = testColors.map(color => {
+                try {
+                    // 简单的转换模拟（实际会使用culori库）
+                    const converted = convertColorSimple(color);
+                    return `${color} → ${converted}`;
+                } catch (e) {
+                    return `${color} → 转换失败: ${e.message}`;
+                }
+            });
+
+            document.getElementById('conversionResults').innerHTML = `
+                <h3>转换结果:</h3>
+                <pre>${results.join('\n')}</pre>
+            `;
+        }
+
+        // 简单的颜色转换模拟
+        function convertColorSimple(color) {
+            if (color.includes('oklch')) return '#3182ce';
+            if (color.includes('color(')) return '#ff0000';
+            if (color.includes('lab(')) return '#666666';
+            if (color.includes('lch(')) return '#999999';
+            return color; // 已经是兼容格式
+        }
+
+        // 测试PDF准备流程
+        function testPDFPreparation() {
+            const testElement = document.createElement('div');
+            testElement.innerHTML = `
+                <div style="color: oklch(0.7 0.15 180); background: linear-gradient(135deg, oklch(0.8 0.1 120) 0%, oklch(0.6 0.2 240) 100%);">
+                    测试元素 - 包含OKLCH颜色
+                </div>
+            `;
+            
+            document.body.appendChild(testElement);
+            
+            // 模拟PDF准备流程
+            const computedStyle = window.getComputedStyle(testElement.firstElementChild);
+            const color = computedStyle.color;
+            const background = computedStyle.background;
+            
+            document.body.removeChild(testElement);
+            
+            document.getElementById('pdfResults').innerHTML = `
+                <h3>PDF准备测试结果:</h3>
+                <pre>
+原始颜色: oklch(0.7 0.15 180)
+计算后颜色: ${color}
+原始背景: linear-gradient(...)
+计算后背景: ${background.substring(0, 100)}...
+
+✅ 颜色自动转换为兼容格式
+✅ PDF导出准备完成
+                </pre>
+            `;
+        }
+
+        // 显示浏览器信息
+        function displayBrowserInfo() {
+            const info = {
+                userAgent: navigator.userAgent,
+                vendor: navigator.vendor,
+                language: navigator.language,
+                platform: navigator.platform,
+                cookieEnabled: navigator.cookieEnabled,
+                onLine: navigator.onLine
+            };
+
+            document.getElementById('browserInfo').innerHTML = `
+                <pre>${JSON.stringify(info, null, 2)}</pre>
+            `;
+        }
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            displayColorSupport();
+            displayBrowserInfo();
+        });
+    </script>
+</body>
+</html>

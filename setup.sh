@@ -108,25 +108,25 @@ check_cmd uv
 success "All prerequisites satisfied."
 
 #–– 2. Ollama & model setup ––#
-info "Checking Ollama installation…"
-if ! command -v ollama &> /dev/null; then
-  info "ollama not found; installing…"
-  if [[ "$OS_TYPE" == "macOS" ]]; then
-    brew install ollama || error "Failed to install Ollama via Homebrew"
-  else
-    curl -LsSf https://ollama.com/install.sh | sh || error "Failed to install Ollama"
-    export PATH="$HOME/.local/bin:$PATH"
-  fi
-  success "Ollama installed"
-fi
+# info "Checking Ollama installation…"
+# if ! command -v ollama &> /dev/null; then
+#   info "ollama not found; installing…"
+#   if [[ "$OS_TYPE" == "macOS" ]]; then
+#     brew install ollama || error "Failed to install Ollama via Homebrew"
+#   else
+#     curl -LsSf https://ollama.com/install.sh | sh || error "Failed to install Ollama"
+#     export PATH="$HOME/.local/bin:$PATH"
+#   fi
+#   success "Ollama installed"
+# fi
 
-if ! ollama list | grep -q 'gemma3:4b'; then
-  info "Pulling gemma3:4b model…"
-  ollama pull gemma3:4b || error "Failed to pull gemma3:4b"
-  success "gemma3:4b model ready"
-else
-  info "gemma3:4b model already present—skipping"
-fi
+# if ! ollama list | grep -q 'gemma3:4b'; then
+#   info "Pulling gemma3:4b model…"
+#   ollama pull gemma3:4b || error "Failed to pull gemma3:4b"
+#   success "gemma3:4b model ready"
+# else
+#   info "gemma3:4b model already present—skipping"
+# fi
 
 #–– 3. Bootstrap root .env ––#
 if [[ -f .env.example && ! -f .env ]]; then

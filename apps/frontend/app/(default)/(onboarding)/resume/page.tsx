@@ -13,6 +13,7 @@ export default function UploadResume() {
 				<p className="text-center text-gray-300 mb-8">
 					Drag and drop your resume file below or click to browse. Supported formats: PDF,
 					DOC, DOCX (Max 10MB).
+          
 				</p>
 				<div className="w-full">
 					<FileUpload />

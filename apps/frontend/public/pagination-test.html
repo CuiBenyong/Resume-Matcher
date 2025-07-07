@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>分页测试页面</title>
+  <style>
+    body {
+      font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .section {
+      margin-bottom: 30px;
+      padding: 20px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+    }
+    .debug-info {
+      background-color: #f5f5f5;
+      padding: 15px;
+      border-radius: 5px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      margin-top: 10px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    h1 { color: #1a1a1a; }
+    h2 { color: #2d2d2d; }
+    h3 { color: #404040; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>分页算法测试</h1>
+    <p>这个页面用于测试和比较预览与导出的分页一致性。</p>
+    
+    <div class="section">
+      <h2>测试内容</h2>
+      <textarea id="testContent" rows="15" style="width: 100%; font-family: monospace;">
+# 张三简历
+
+## 个人信息
+- 姓名：张三
+- 电话：13812345678
+- 邮箱：zhangsan@example.com
+- 地址：北京市朝阳区
+
+## 教育经历
+
+### 北京大学 - 计算机科学与技术 (2018-2022)
+- 学士学位，GPA: 3.8/4.0
+- 主修课程：数据结构、算法设计、数据库系统、软件工程
+- 获得奖项：优秀学生奖学金、ACM程序设计竞赛二等奖
+
+## 工作经历
+
+### 腾讯科技 - 前端开发工程师 (2022.7-至今)
+- 负责腾讯会议前端功能开发和维护
+- 使用React、TypeScript、Node.js等技术栈
+- 参与微服务架构设计，提升系统可扩展性
+- 优化前端性能，页面加载速度提升30%
+- 协助团队完成敏捷开发流程，提高开发效率
+
+### 字节跳动 - 实习生 (2021.6-2021.9)
+- 参与抖音创作者平台功能开发
+- 学习并应用Vue.js、Element UI等前端技术
+- 协助完成用户界面优化，提升用户体验
+- 参与代码审查和技术文档编写
+
+## 项目经验
+
+### 在线教育平台 (2022.3-2022.6)
+**技术栈：** React, Redux, Node.js, MongoDB, Docker
+**项目描述：** 设计和开发在线教育平台，支持视频课程观看、作业提交、考试系统等功能
+**主要贡献：**
+- 实现响应式用户界面，支持PC端和移动端
+- 设计RESTful API，处理用户认证和权限管理
+- 集成第三方支付系统，支持课程购买功能
+- 使用Redis缓存优化数据库查询性能
+- 部署到云服务器，实现自动化CI/CD流程
+
+### 电商购物网站 (2021.9-2021.12)
+**技术栈：** Vue.js, Vuex, Express.js, MySQL
+**项目描述：** 开发完整的电商购物网站，包括商品浏览、购物车、订单管理等功能
+**主要贡献：**
+- 设计商品分类和搜索功能，提升用户购物体验
+- 实现购物车和订单流程，支持多种支付方式
+- 优化数据库查询，处理高并发商品浏览请求
+- 集成物流跟踪API，实现订单状态实时更新
+
+## 技能专长
+
+### 编程语言
+- JavaScript/TypeScript (精通)
+- Python (熟练)
+- Java (熟练)
+- HTML5/CSS3 (精通)
+
+### 前端技术
+- React/Vue.js框架开发
+- 响应式设计和移动端适配
+- Webpack/Vite构建工具
+- 前端性能优化
+- 单元测试和E2E测试
+
+### 后端技术
+- Node.js/Express.js
+- RESTful API设计
+- 数据库设计(MySQL/MongoDB)
+- 微服务架构
+- Docker容器化部署
+
+### 其他技能
+- Git版本控制
+- 敏捷开发流程
+- 团队协作和沟通
+- 技术文档编写
+
+## 个人项目
+
+### 个人博客系统
+**技术栈：** Next.js, Tailwind CSS, Prisma, PostgreSQL
+使用现代化前端技术栈构建个人博客，支持Markdown编辑、标签分类、评论系统等功能。
+
+### 任务管理工具
+**技术栈：** React Native, Redux Toolkit, SQLite
+开发跨平台移动应用，帮助用户管理日常任务和提醒事项，支持离线使用。
+
+## 证书与奖项
+- AWS Certified Developer Associate (2023)
+- 优秀毕业生 (2022)
+- ACM-ICPC程序设计竞赛全国二等奖 (2021)
+- 国家励志奖学金 (2020, 2021)
+
+## 自我评价
+我是一名热爱技术的前端开发工程师，具有扎实的计算机基础知识和丰富的项目经验。善于学习新技术，能够快速适应团队开发环境。注重代码质量和用户体验，具备良好的沟通能力和团队合作精神。期待在新的工作环境中发挥专业技能，为公司创造价值。
+      </textarea>
+      
+      <button onclick="testPagination()">测试分页算法</button>
+      <button onclick="exportPDF()">测试PDF导出</button>
+      
+      <div id="debugOutput" class="debug-info" style="display: none;"></div>
+    </div>
+    
+    <div class="section">
+      <h2>分页结果对比</h2>
+      <div id="comparisonOutput" style="display: none;"></div>
+    </div>
+  </div>
+
+  <script>
+    // 模拟分页算法（与后端保持一致）
+    function splitContentIntoPages(content, config = {}) {
+      const { 
+        maxLinesPerPage = 45,
+        sectionBreakThreshold = 0.7,
+        subSectionBreakThreshold = 0.8
+      } = config;
+      
+      const lines = content.split('\n');
+      const pages = [];
+      let currentPage = [];
+      let currentLines = 0;
+      
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const trimmedLine = line.trim();
+        
+        // 计算行高权重
+        let lineWeight = 1;
+        if (trimmedLine.match(/^#{1}\s/)) {
+          lineWeight = 2.5; // H1标题
+        } else if (trimmedLine.match(/^#{2}\s/)) {
+          lineWeight = 2; // H2标题
+        } else if (trimmedLine.match(/^#{3}\s/)) {
+          lineWeight = 1.5; // H3标题
+        } else if (trimmedLine.length > 100) {
+          lineWeight = Math.ceil(trimmedLine.length / 80); // 长行
+        }
+        
+        const isNewSection = trimmedLine.match(/^#{1,2}\s/); // 主要章节
+        const isSubSection = trimmedLine.match(/^#{3}\s/); // 子章节
+        
+        // 智能分页决策
+        const shouldPageBreak = (
+          // 主要章节且当前页已有内容且接近满页
+          (isNewSection && currentLines > 15 && currentLines + lineWeight > maxLinesPerPage * sectionBreakThreshold) ||
+          // 子章节且当前页内容较多
+          (isSubSection && currentLines > 25 && currentLines + lineWeight > maxLinesPerPage * subSectionBreakThreshold) ||
+          // 超过最大行数限制
+          (currentLines + lineWeight > maxLinesPerPage && currentPage.length > 5)
+        );
+        
+        if (shouldPageBreak) {
+          if (currentPage.length > 0) {
+            pages.push(currentPage.join('\n'));
+            currentPage = [];
+            currentLines = 0;
+          }
+        }
+        
+        currentPage.push(line);
+        currentLines += lineWeight;
+      }
+      
+      if (currentPage.length > 0) {
+        pages.push(currentPage.join('\n'));
+      }
+      
+      // 确保至少有一页
+      return pages.length > 0 ? pages : [content];
+    }
+
+    function getPaginationDebugInfo(content, config = {}) {
+      const pages = splitContentIntoPages(content, config);
+      return {
+        totalLength: content.length,
+        totalLines: content.split('\n').length,
+        pagesCount: pages.length,
+        pagesSummary: pages.map((page, index) => ({
+          pageIndex: index + 1,
+          lines: page.split('\n').length,
+          characters: page.length,
+          firstLine: page.split('\n')[0]?.trim() || '',
+          lastLine: page.split('\n').slice(-1)[0]?.trim() || '',
+        })),
+        config,
+      };
+    }
+
+    function testPagination() {
+      const content = document.getElementById('testContent').value;
+      const debugInfo = getPaginationDebugInfo(content);
+      
+      document.getElementById('debugOutput').style.display = 'block';
+      document.getElementById('debugOutput').textContent = JSON.stringify(debugInfo, null, 2);
+      
+      // 显示比较结果
+      const comparisonDiv = document.getElementById('comparisonOutput');
+      comparisonDiv.style.display = 'block';
+      comparisonDiv.innerHTML = `
+        <h3>分页结果总览</h3>
+        <p><strong>总页数:</strong> ${debugInfo.pagesCount}</p>
+        <p><strong>总字符数:</strong> ${debugInfo.totalLength}</p>
+        <p><strong>总行数:</strong> ${debugInfo.totalLines}</p>
+        
+        <h4>各页详情:</h4>
+        ${debugInfo.pagesSummary.map(page => `
+          <div style="border: 1px solid #ddd; margin: 10px 0; padding: 10px; border-radius: 5px;">
+            <strong>第${page.pageIndex}页</strong> - ${page.lines}行, ${page.characters}字符<br>
+            <em>开始:</em> ${page.firstLine}<br>
+            <em>结束:</em> ${page.lastLine}
+          </div>
+        `).join('')}
+      `;
+    }
+
+    function exportPDF() {
+      const content = document.getElementById('testContent').value;
+      
+      // 模拟PDF导出测试
+      fetch('/api/pdf-export', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          html: generateHTMLForPDF(content),
+          options: {
+            format: 'A4',
+            margin: {
+              top: '15mm',
+              right: '15mm',
+              bottom: '15mm',
+              left: '15mm'
+            },
+            printBackground: true,
+            preferCSSPageSize: true
+          }
+        })
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('PDF导出失败');
+        }
+        return response.blob();
+      })
+      .then(blob => {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'test-pagination.pdf';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        
+        alert('PDF导出成功！请检查导出的PDF页数是否与预览一致。');
+      })
+      .catch(error => {
+        console.error('PDF导出错误:', error);
+        alert('PDF导出失败: ' + error.message);
+      });
+    }
+
+    function generateHTMLForPDF(content) {
+      const pages = splitContentIntoPages(content);
+      
+      const pageContents = pages.map((pageContent, pageIndex) => {
+        // 简单的Markdown到HTML转换
+        const htmlContent = pageContent
+          .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+          .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+          .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+          .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
+          .replace(/\*(.*)\*/gim, '<em>$1</em>')
+          .replace(/^- (.*$)/gim, '<li>$1</li>')
+          .replace(/\n/gim, '<br>');
+        
+        return `
+          <div class="page-container" style="
+            page-break-after: ${pageIndex < pages.length - 1 ? 'always' : 'auto'};
+            page-break-inside: avoid;
+            min-height: calc(100vh - 30mm);
+            position: relative;
+          ">
+            ${htmlContent}
+            ${pages.length > 1 ? `
+              <div class="page-number" style="
+                position: absolute;
+                bottom: 8mm;
+                right: 15mm;
+                font-size: 11px;
+                color: #666;
+                z-index: 100;
+              ">
+                第 ${pageIndex + 1} 页，共 ${pages.length} 页
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+      
+      return `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <title>分页测试</title>
+          <style>
+            @page { 
+              size: A4; 
+              margin: 15mm;
+            }
+            body {
+              font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+              font-size: 14px;
+              line-height: 1.6;
+              color: #333;
+              margin: 0;
+              padding: 0;
+            }
+            .page-container {
+              page-break-after: always;
+              min-height: calc(100vh - 30mm);
+              position: relative;
+            }
+            .page-container:last-child {
+              page-break-after: avoid;
+            }
+            h1 { 
+              font-size: 24px; 
+              font-weight: bold; 
+              margin: 20px 0 16px 0; 
+              color: #1a1a1a; 
+              page-break-after: avoid;
+            }
+            h2 { 
+              font-size: 20px; 
+              font-weight: bold; 
+              margin: 16px 0 12px 0; 
+              color: #2d2d2d; 
+              page-break-after: avoid;
+            }
+            h3 { 
+              font-size: 16px; 
+              font-weight: 600; 
+              margin: 12px 0 8px 0; 
+              color: #404040; 
+              page-break-after: avoid;
+            }
+            p { 
+              margin: 8px 0; 
+              orphans: 3; 
+              widows: 3; 
+            }
+            strong { font-weight: 600; }
+            em { font-style: italic; }
+            ul, ol { 
+              margin: 8px 0; 
+              padding-left: 20px;
+              page-break-inside: avoid;
+            }
+            li { 
+              margin: 4px 0;
+              page-break-inside: avoid;
+            }
+            hr { 
+              margin: 16px 0; 
+              border: none; 
+              border-top: 1px solid #e0e0e0;
+              page-break-after: avoid;
+            }
+            a { color: #0066cc; text-decoration: none; }
+          </style>
+        </head>
+        <body>
+          ${pageContents}
+        </body>
+        </html>
+      `;
+    }
+  </script>
+</body>
+</html>
