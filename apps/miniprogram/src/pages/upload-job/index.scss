@@ -1,0 +1,196 @@
+.upload-job {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 40rpx;
+
+  .form-section {
+    background: white;
+    border-radius: 20rpx;
+    padding: 40rpx;
+    margin-bottom: 40rpx;
+    box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+
+    .input-group {
+      margin-bottom: 40rpx;
+
+      .label {
+        font-size: 32rpx;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 20rpx;
+        display: block;
+      }
+
+      .input {
+        width: 100%;
+        padding: 24rpx 30rpx;
+        border: 2rpx solid #e5e7eb;
+        border-radius: 16rpx;
+        font-size: 30rpx;
+      }
+
+      .textarea {
+        width: 100%;
+        min-height: 400rpx;
+        padding: 30rpx;
+        border: 2rpx solid #e5e7eb;
+        border-radius: 16rpx;
+        font-size: 30rpx;
+        line-height: 1.6;
+        margin-bottom: 16rpx;
+      }
+
+      .char-count {
+        text-align: right;
+
+        text {
+          font-size: 24rpx;
+          color: #999;
+        }
+      }
+    }
+
+    .analyze-btn {
+      width: 100%;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 50rpx;
+      padding: 28rpx 0;
+      font-size: 32rpx;
+      font-weight: bold;
+
+      &[disabled] {
+        background: #d1d5db;
+        color: #9ca3af;
+      }
+    }
+  }
+
+  .result-section {
+    background: white;
+    border-radius: 20rpx;
+    padding: 40rpx;
+    box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+
+    .section-title {
+      font-size: 36rpx;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 30rpx;
+      display: block;
+    }
+
+    .result-card {
+      background: #f8fafc;
+      border-radius: 16rpx;
+      padding: 30rpx;
+      margin-bottom: 40rpx;
+
+      .result-item {
+        margin-bottom: 30rpx;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .item-label {
+          font-size: 28rpx;
+          font-weight: bold;
+          color: #374151;
+          margin-bottom: 16rpx;
+          display: block;
+        }
+
+        .skills-list {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 16rpx;
+
+          .skill-tag {
+            background: #3b82f6;
+            color: white;
+            padding: 8rpx 16rpx;
+            border-radius: 24rpx;
+            font-size: 24rpx;
+            display: inline-block;
+          }
+
+          .more-count {
+            background: #e5e7eb;
+            color: #6b7280;
+            padding: 8rpx 16rpx;
+            border-radius: 24rpx;
+            font-size: 24rpx;
+            display: inline-block;
+          }
+        }
+
+        .item-value {
+          font-size: 28rpx;
+          color: #6b7280;
+          display: block;
+        }
+
+        .difficulty {
+          padding: 8rpx 20rpx;
+          border-radius: 24rpx;
+          font-size: 24rpx;
+          font-weight: bold;
+          display: inline-block;
+
+          &.entry {
+            background: #dcfce7;
+            color: #166534;
+          }
+
+          &.mid {
+            background: #fef3c7;
+            color: #92400e;
+          }
+
+          &.senior {
+            background: #fecaca;
+            color: #991b1b;
+          }
+
+          &.expert {
+            background: #e0e7ff;
+            color: #3730a3;
+          }
+        }
+      }
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 20rpx;
+
+      .detail-btn,
+      .save-btn,
+      .match-btn {
+        flex: 1;
+        padding: 24rpx 0;
+        border-radius: 50rpx;
+        font-size: 28rpx;
+        font-weight: bold;
+        border: none;
+      }
+
+      .detail-btn {
+        background: #f3f4f6;
+        color: #374151;
+      }
+
+      .save-btn {
+        background: #10b981;
+        color: white;
+      }
+
+      .match-btn {
+        background: #f59e0b;
+        color: white;
+      }
+    }
+  }
+}

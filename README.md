@@ -5,7 +5,7 @@
 # Resume Matcher
 
 
-[𝙹𝚘𝚒𝚗 𝙳𝚒𝚜𝚌𝚘𝚛𝚍](https://dsc.gg/resume-matcher) ✦ [𝚆𝚎𝚋𝚜𝚒𝚝𝚎](https://resumematcher.fyi) ✦ [𝙷𝚘𝚠 𝚝𝚘 𝙸𝚗𝚜𝚝𝚊𝚕𝚕 ](#how-to-install) ✦ [𝙲𝚘𝚗𝚝𝚛𝚒𝚋𝚞𝚝𝚘𝚛𝚜](#contributors) ✦ [𝙳𝚘𝚗𝚊𝚝𝚎](#support-the-development-by-donating) ✦ [𝚃𝚠𝚒𝚝𝚝𝚎𝚛/𝚇](https://twitter.com/_srbhr_) ✦ [𝙻𝚒𝚗𝚔𝚎𝚍𝙸𝚗](https://www.linkedin.com/company/resume-matcher/)
+[𝙹𝚘𝚒𝚗 𝙳𝚒𝚜𝚌𝚘𝚛𝚍](https://dsc.gg/resume-matcher) ✦ [𝚆𝚎𝚋𝚜𝚒𝚝𝚎](https://resumematcher.fyi) ✦ [����� �𝚊��](#quick-start) ✦ [𝙲𝚘𝚗𝚝𝚛𝚒𝚋𝚞𝚝𝚘𝚛𝚜](#contributors) ✦ [𝙳𝚘𝚗𝚊𝚝𝚎](#support-the-development-by-donating) ✦ [𝚃𝚠𝚒𝚝𝚝𝚎𝚛/𝚇](https://twitter.com/_srbhr_) ✦ [𝙻𝚒𝚗𝚔𝚎𝚍𝙸𝚗](https://www.linkedin.com/company/resume-matcher/)
 
 **Stop getting auto-rejected by ATS bots.** Resume Matcher is the AI-powered platform that reverse-engineers hiring algorithms to show you exactly how to tailor your resume. Get the keywords, formatting, and insights that actually get you past the first screen and into human hands.
 
@@ -65,36 +65,107 @@ If you have any suggestions or feature requests, please feel free to open an iss
 - AI Canvas, which can help to craft impactful, metric-driven resume content.
 - Multi-job description optimization.
 
-## How to Install
+## Quick Start
 
 ![Installation](assets/how_to_install_resumematcher.png)
 
-Follow the instructions in the [SETUP.md](SETUP.md) file to set up the project locally. The setup script will install all the necessary dependencies and configure your environment.
+### 🚀 One-Click Install & Start
 
-The project is built using:
+We've created automated scripts to get you up and running in minutes:
 
-- FastAPI for the backend.
-- Next.js for the frontend.
-- Ollama for local AI model serving.
-- Tailwind CSS for styling.
-- SQLite for the database.
+#### macOS/Linux/WSL:
+```bash
+git clone https://github.com/srbhr/Resume-Matcher.git
+cd Resume-Matcher
+chmod +x install-and-start.sh
+./install-and-start.sh
+```
 
-create a markdown table
+#### Windows:
+```cmd
+git clone https://github.com/srbhr/Resume-Matcher.git
+cd Resume-Matcher
+install-and-start.bat
+```
 
-| Technology   | Info/Version                               |
-|--------------|---------------------------------------|
-| Python      | 3.12+                   |
-| Next.js      | 15+                   |
-| Ollama       |        0.6.7        |
+### 🔧 Manual Installation
+
+For detailed setup instructions, see our [Development Guide](DEVELOPMENT.md) or follow the [SETUP.md](SETUP.md) instructions.
+
+### 🏗️ Technology Stack
+
+| Technology   | Version      | Purpose                    |
+|--------------|--------------|----------------------------|
+| **Frontend** |              |                            |
+| Next.js      | 14+          | React framework            |
+| TypeScript   | 5+           | Type safety                |
+| Tailwind CSS | 3+           | Styling framework          |
+| **Backend**  |              |                            |
+| FastAPI      | 0.100+       | Python web framework       |
+| Python       | 3.9+         | Backend language           |
+| SQLAlchemy   | 2.0+         | Database ORM               |
+| **AI/ML**    |              |                            |
+| OpenAI API   | Latest       | GPT models                 |
+| Moonshot AI  | Latest       | Alternative AI provider    |
+| **Database** |              |                            |
+| SQLite       | 3+           | Development database       |
+| PostgreSQL   | 14+          | Production database        |
+| **DevOps**   |              |                            |
+| Docker       | 24+          | Containerization           |
+| UV           | Latest       | Python package manager     |
+
+### 📱 Access the Application
+
+Once started, you can access:
+- **Frontend**: http://localhost:3000 - Main application interface
+- **Backend API**: http://localhost:8000 - REST API endpoints  
+- **API Documentation**: http://localhost:8000/docs - Interactive API docs
+- **Health Check**: http://localhost:8000/health - Service status
 
 
 ## Join Us and Contribute
 
 ![how to contribute](assets/how_to_contribute.png)
 
-We welcome contributions from everyone! Whether you're a developer, designer, or just someone who wants to help out. All the contriburtors are listed in the [about page](https://resumematcher.fyi/about) on our website and on the GitHub Readme here.
+We welcome contributions from everyone! Whether you're a developer, designer, or just someone who wants to help out. All the contributors are listed in the [about page](https://resumematcher.fyi/about) on our website and on the GitHub Readme here.
 
-Checkout the roadmap if you would like to work on the features that are planned for the future. If you have any suggestions or feature requests, please feel free to open an issue on GitHub. And discuss it on our [Discord](https://dsc.gg/resume-matcher) server.
+### 🛠️ Development Setup
+
+For detailed development instructions, see our comprehensive [Development Guide](DEVELOPMENT.md) which covers:
+
+- 🏗️ **Project Architecture**: Understanding the codebase structure
+- 🔧 **Local Development**: Setting up your dev environment  
+- 🧪 **Testing**: Running tests and writing new ones
+- 📚 **API Documentation**: Backend API reference
+- 🚀 **Deployment**: Production deployment guides
+- 🤝 **Contributing**: Code style and submission guidelines
+
+### 🗺️ Roadmap & Feature Requests
+
+Check out our roadmap for planned features. If you have suggestions or want to request a feature:
+
+1. Open an issue on GitHub with your idea
+2. Join our [Discord](https://dsc.gg/resume-matcher) to discuss with the community
+3. Check existing issues to see if someone else has the same idea
+
+**Upcoming Features:**
+- Visual keyword highlighting
+- AI Canvas for crafting impactful, metric-driven resume content  
+- Multi-job description optimization
+- Advanced ATS compatibility scoring
+- Resume template library
+- Performance analytics dashboard
+
+### 🤝 How to Contribute
+
+1. **Fork** the repository
+2. **Clone** your fork locally
+3. **Create** a feature branch: `git checkout -b feature/amazing-feature`
+4. **Make** your changes and commit: `git commit -m 'feat: add amazing feature'`
+5. **Push** to your branch: `git push origin feature/amazing-feature`
+6. **Submit** a Pull Request
+
+See our [Development Guide](DEVELOPMENT.md) for detailed contribution guidelines, code standards, and development workflows.
 
 ## Contributors
 ![Contributors](assets/contributors.png)

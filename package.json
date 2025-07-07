@@ -1,9 +1,19 @@
 {
     "name": "resume-matcher",
-    "version": "0.0.1",
-    "description": "Veridis Quo.",
+    "version": "0.1.0",
+    "description": "AI-powered resume optimization tool that helps you tailor your resume to job descriptions.",
     "private": true,
+    "keywords": ["resume", "matcher", "ai", "job", "optimization", "ats"],
+    "author": "Resume Matcher Team",
+    "license": "Apache-2.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/srbhr/Resume-Matcher.git"
+    },
     "scripts": {
+        "setup": "./install-and-start.sh --install-only",
+        "quick-start": "./install-and-start.sh",
+        "status": "./check-status.sh",
         "install:frontend": "cd apps/frontend && npm install",
         "install:backend": "cd apps/backend && uv venv && . .venv/bin/activate && uv pip install .",
         "install": "npm run install:frontend && npm run install:backend",
@@ -16,10 +26,23 @@
         "start:backend": "cd apps/backend && . .venv/bin/activate && uvicorn app.main:app --port 8000",
         "start:frontend": "cd apps/frontend && npm start",
         "start": "concurrently \"npm:start:backend\" \"npm:start:frontend\"",
+        "test:frontend": "cd apps/frontend && npm run test",
+        "test:backend": "cd apps/backend && . .venv/bin/activate && pytest",
+        "test": "npm run test:frontend && npm run test:backend",
         "lint:frontend": "cd apps/frontend && npm run lint",
-        "lint": "npm run lint:frontend"
+        "lint:backend": "cd apps/backend && . .venv/bin/activate && ruff check .",
+        "lint": "npm run lint:frontend && npm run lint:backend",
+        "format:frontend": "cd apps/frontend && npm run format",
+        "format:backend": "cd apps/backend && . .venv/bin/activate && black . && ruff format .",
+        "format": "npm run format:frontend && npm run format:backend",
+        "clean": "rm -rf apps/frontend/node_modules apps/frontend/.next apps/backend/.venv apps/backend/__pycache__ apps/backend/**/__pycache__",
+        "reset": "npm run clean && npm run install"
     },
     "devDependencies": {
         "concurrently": "^9.1.2"
+    },
+    "engines": {
+        "node": ">=18.0.0",
+        "npm": ">=8.0.0"
     }
 }

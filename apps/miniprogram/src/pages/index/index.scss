@@ -1,0 +1,86 @@
+.index {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  
+  .header {
+    text-align: center;
+    padding: 80rpx 40rpx 60rpx;
+    
+    .title {
+      font-size: 56rpx;
+      font-weight: bold;
+      display: block;
+      margin-bottom: 20rpx;
+    }
+    
+    .subtitle {
+      font-size: 32rpx;
+      opacity: 0.9;
+      display: block;
+    }
+  }
+  
+  .features {
+    padding: 0 40rpx;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30rpx;
+    margin-bottom: 60rpx;
+    
+    .feature-card {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 20rpx;
+      padding: 40rpx 30rpx;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+      
+      .feature-icon {
+        font-size: 60rpx;
+        margin-bottom: 20rpx;
+      }
+      
+      .feature-title {
+        font-size: 32rpx;
+        font-weight: bold;
+        display: block;
+        margin-bottom: 15rpx;
+      }
+      
+      .feature-desc {
+        font-size: 24rpx;
+        opacity: 0.8;
+        line-height: 1.4;
+        display: block;
+      }
+      
+      &:active {
+        transform: scale(0.95);
+        background: rgba(255, 255, 255, 0.25);
+      }
+    }
+  }
+  
+  .quick-actions {
+    padding: 0 40rpx 40rpx;
+    
+    .primary-btn {
+      width: 100%;
+      background: #ff6b6b;
+      color: white;
+      border: none;
+      border-radius: 50rpx;
+      padding: 28rpx 0;
+      font-size: 36rpx;
+      font-weight: bold;
+      box-shadow: 0 8rpx 24rpx rgba(255, 107, 107, 0.3);
+      
+      &:active {
+        transform: translateY(2rpx);
+        box-shadow: 0 4rpx 12rpx rgba(255, 107, 107, 0.3);
+      }
+    }
+  }
+}
