@@ -133,6 +133,7 @@ class JobService:
             )
         except ValidationError as e:
             logger.info(f"Validation error: {e}")
+            logger.info(f"Raw output: {raw_output}")
             return None
         return structured_job.model_dump(mode="json")
 

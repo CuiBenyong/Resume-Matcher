@@ -1,8 +1,28 @@
+// 环境配置
+const ENV_CONFIG = {
+  development: {
+    baseURL: 'http://localhost:8000',
+    debug: true
+  },
+  production: {
+    baseURL: 'https://your-api-domain.com',
+    debug: false
+  }
+}
+
+// 方案1: 手动设置环境（推荐用于小程序）
+const CURRENT_ENV = 'development' // 手动切换：'development' | 'production'
+
+// 方案2: 基于小程序账号类型判断（适用于微信小程序）
+// const CURRENT_ENV = __wxConfig.envVersion === 'develop' ? 'development' : 'production'
+
+// 方案3: 基于域名判断（适用于H5应用）
+// const CURRENT_ENV = location.hostname.includes('localhost') ? 'development' : 'production'
+
 // API 配置
 export const API_CONFIG = {
-  baseURL: process.env.NODE_ENV === 'development' 
-    ? 'http://localhost:8000' 
-    : 'https://your-api-domain.com'
+  baseURL: ENV_CONFIG[CURRENT_ENV].baseURL,
+  debug: ENV_CONFIG[CURRENT_ENV].debug
 }
 
 export const API_BASE_URL = API_CONFIG.baseURL
@@ -63,4 +83,11 @@ export const COLORS = {
     default: '#f5f5f5',
     paper: '#ffffff'
   }
+}
+
+// 新增环境检测工具
+export const ENV_UTILS = {
+  isDevelopment: () => CURRENT_ENV === 'development',
+  isProduction: () => CURRENT_ENV === 'production',
+  getCurrentEnv: () => CURRENT_ENV
 }

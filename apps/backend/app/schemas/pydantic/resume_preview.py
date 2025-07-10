@@ -5,8 +5,8 @@ from pydantic import BaseModel
 class PersonalInfo(BaseModel):
     name: str
     title: Optional[str] = None
-    email: str
-    phone: str
+    email: Optional[str] = None
+    phone: Optional[str] = None
     location: Optional[str] = None
     website: Optional[str] = None
     linkedin: Optional[str] = None
@@ -32,7 +32,7 @@ class EducationItem(BaseModel):
 
 class ResumePreviewerModel(BaseModel):
     personalInfo: PersonalInfo
-    summary: str
-    experience: List[ExperienceItem]
-    education: List[EducationItem]
-    skills: List[str]
+    summary: Optional[str] = ''
+    experience: Optional[List[ExperienceItem]] = []
+    education: Optional[List[EducationItem]] = []
+    skills: Optional[List[str]] = []

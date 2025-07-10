@@ -21,10 +21,10 @@ class AgentManager:
 
     async def _get_provider(self, **kwargs: Any) -> OllamaProvider | OpenAIProvider | MoonshotProvider:
         # 优先检查 Moonshot API 密钥
-        moonshot_api_key = kwargs.get("moonshot_api_key", os.getenv("MOONSHOT_API_KEY"))
-        if moonshot_api_key:
-            model = kwargs.get("model", "moonshot-v1-8k")
-            return MoonshotProvider(api_key=moonshot_api_key, model=model)
+        # moonshot_api_key = kwargs.get("moonshot_api_key", os.getenv("MOONSHOT_API_KEY"))
+        # if moonshot_api_key:
+        #     model = kwargs.get("model", "moonshot-v1-8k")
+        #     return MoonshotProvider(api_key=moonshot_api_key, model=model)
         
         # 检查 OpenAI API 密钥
         openai_api_key = kwargs.get("openai_api_key", os.getenv("OPENAI_API_KEY"))
@@ -49,17 +49,17 @@ class AgentManager:
 
 
 class EmbeddingManager:
-    def __init__(self, model: str = "nomic-embed-text:137m-v1.5-fp16") -> None:
+    def __init__(self, model: str = "nomic-embed-text:latest") -> None:
         self._model = model
 
     async def _get_embedding_provider(
         self, **kwargs: Any
     ) -> OllamaEmbeddingProvider | OpenAIEmbeddingProvider | MoonshotEmbeddingProvider:
         # 优先检查 Moonshot API 密钥
-        moonshot_api_key = kwargs.get("moonshot_api_key", os.getenv("MOONSHOT_API_KEY"))
-        if moonshot_api_key:
-            embedding_model = kwargs.get("embedding_model", "moonshot-embedding-v1")
-            return MoonshotEmbeddingProvider(api_key=moonshot_api_key, embedding_model=embedding_model)
+        # moonshot_api_key = kwargs.get("moonshot_api_key", os.getenv("MOONSHOT_API_KEY"))
+        # if moonshot_api_key:
+        #     embedding_model = kwargs.get("embedding_model", "moonshot-embedding-v1")
+        #     return MoonshotEmbeddingProvider(api_key=moonshot_api_key, embedding_model=embedding_model)
         
         # 检查 OpenAI API 密钥
         openai_api_key = kwargs.get("openai_api_key", os.getenv("OPENAI_API_KEY"))

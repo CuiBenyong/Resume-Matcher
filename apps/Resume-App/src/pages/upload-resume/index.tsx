@@ -2,6 +2,7 @@ import { Component } from 'react'
 import { View, Text, Button, Textarea, Image, Progress } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { resumeService } from '../../services/resumeService'
+import { API_BASE_URL } from '../../constants/config'
 import './index.scss'
 
 interface UploadResumeProps {}
@@ -67,7 +68,7 @@ export default class UploadResume extends Component<UploadResumeProps, UploadRes
 
     try {
       const uploadTask = Taro.uploadFile({
-        url: `${process.env.API_BASE_URL || 'http://localhost:8000'}/api/v1/resumes/upload`,
+        url: `${API_BASE_URL}/api/v1/resumes/upload`,
         filePath: selectedFile.path,
         name: 'file',
         success: (res) => {

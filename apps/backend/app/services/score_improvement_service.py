@@ -169,11 +169,14 @@ class ScoreImprovementService:
             json.loads(processed_job.extracted_keywords).get("extracted_keywords", [])
         )
 
-        extracted_resume_keywords = ", ".join(
-            json.loads(processed_resume.extracted_keywords).get(
-                "extracted_keywords", []
+        if processed_resume is None or processed_resume.extracted_keywords is None:
+            extracted_resume_keywords = ""
+        else:
+            extracted_resume_keywords = ", ".join(
+                json.loads(processed_resume.extracted_keywords).get(
+                    "extracted_keywords", []
+                )
             )
-        )
 
         resume_embedding_task = asyncio.create_task(
             self.embedding_manager.embed(resume.content)

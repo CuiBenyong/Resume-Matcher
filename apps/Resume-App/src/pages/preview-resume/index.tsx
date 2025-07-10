@@ -2,6 +2,7 @@ import { Component } from 'react'
 import { View, Text, ScrollView, Button, RichText } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { resumeService } from '../../services/resumeService'
+import { API_BASE_URL } from '../../constants/config'
 import './index.scss'
 
 interface PreviewResumeProps {}
@@ -78,7 +79,7 @@ export default class PreviewResume extends Component<PreviewResumeProps, Preview
       
       // 调用后端API生成PDF
       const response = await Taro.request({
-        url: `${process.env.API_BASE_URL || 'http://localhost:8000'}/api/v1/resume-generator/${resumeId}/pdf`,
+        url: `${API_BASE_URL}/api/v1/resume-generator/${resumeId}/pdf`,
         method: 'GET',
         responseType: 'arraybuffer'
       })

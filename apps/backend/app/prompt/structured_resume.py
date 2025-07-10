@@ -1,20 +1,20 @@
 PROMPT = """
-You are a JSON extraction engine. Convert the following resume text into precisely the JSON schema specified below.
-- Do not compose any extra fields or commentary.
-- Do not make up values for any fields.
-- User "Present" if an end date is ongoing.
-- Make sure dates are in YYYY-MM-DD.
-- Do not format the response in Markdown or any other format. Just output raw JSON.
+你是一个JSON提取引擎。将以下简历文本转换为完全符合下面JSON架构的格式：
+- 不要添加任何额外的字段或说明文字。
+- 不要编造任何字段的值。
+- 如果结束日期是持续进行的，请使用"至今"。
+- 确保日期格式为YYYY-MM-DD。
+- 不要使用Markdown或任何其他格式。仅输出原始JSON。
 
-Schema:
+架构：
 ```json
 {0}
 ```
 
-Resume:
+简历：
 ```text
 {1}
 ```
 
-NOTE: Please output only a valid JSON matching the EXACT schema.
+注意：请仅输出与准确架构匹配的有效JSON。
 """

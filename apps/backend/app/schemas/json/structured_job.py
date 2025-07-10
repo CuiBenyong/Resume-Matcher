@@ -11,10 +11,10 @@ SCHEMA = {
         "city": "string",
         "state": "string",
         "country": "string",
-        "remoteStatus": "string",
+        "remoteStatus": "enum: ['完全远程', '混合办公', '现场办公', '远程', '未指定']",
     },
     "datePosted": "YYYY-MM-DD",
-    "employmentType": "string",
+    "employmentType": "enum: ['全职', '兼职', '合同工', '实习', '临时工', '未指定']",
     "jobSummary": "string",
     "keyResponsibilities": [
         "string",

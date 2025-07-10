@@ -1,18 +1,19 @@
 PROMPT = """
-You are a JSON-extraction engine. Convert the following raw job posting text into exactly the JSON schema below:
-— Do not add any extra fields or prose.
-— Use “YYYY-MM-DD” for all dates.
-— Ensure any URLs (website, applyLink) conform to URI format.
-— Do not change the structure or key names; output only valid JSON matching the schema.
-- Do not format the response in Markdown or any other format. Just output raw JSON.
+你是一个JSON提取引擎。将以下原始职位发布文本转换为完全符合下面JSON架构的格式：
+— 不要添加任何额外的字段或说明文字。
+— 所有日期使用"YYYY-MM-DD"格式。
+— 确保任何URL（网站链接、申请链接）符合URI格式。
+— 不要更改结构或键名；仅输出与架构匹配的有效JSON。
+— 不要使用Markdown或任何其他格式。仅输出原始JSON。
+- 对于 enum 字段，确保值严格符合指定的枚举选项，例如：对于“location”字段，值必须是“完全远程”、“混合办公”、“现场办公”、“远程”或“未指定”之一，对于 employmentType 字段值必须是 '全职', '兼职', '合同工', '实习', '临时工', '未指定'之一。
 
-Schema:
+架构：
 ```json
 {0}
 ```
 
-Job Posting:
+职位发布：
 {1}
 
-Note: Please output only a valid JSON matching the EXACT schema with no surrounding commentary.
+注意：请仅输出与准确架构匹配的有效JSON，不要包含任何说明文字。
 """

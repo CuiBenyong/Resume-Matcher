@@ -7,6 +7,7 @@ import logging
 from markitdown import MarkItDown
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy import or_, func
 from pydantic import ValidationError
 from typing import Dict, Optional
 
@@ -210,3 +211,64 @@ class ResumeService:
             }
 
         return combined_data
+
+    async def get_resume_list(
+        self, 
+        offset: int = 0, 
+        limit: int = 10, 
+        search: str = None
+    ) -> tuple[list[dict], int]:
+        """
+        获取简历列表
+        
+        Args:
+            offset: 偏移量
+            limit: 限制数量
+            search: 搜索关键词
+            
+        Returns:
+            tuple: (简历列表, 总数量)
+        """
+        try:
+            # 构建基础查询
+            query = select(Resume)
+            
+            # 添加搜索条件
+            if search:
+                search_filter = or_(
+                    Resume.filename.ilike(f"%{search}%"),
+                    Resume.content.ilike(f"%{search}%")
+                )
+                query = query.where(search_filter)
+            
+            # 获取总数
+            count_query = select(func.count(Resume.id)).select_from(query.subquery())
+            total_count_result = await self.db.execute(count_query)
+            total_count = total_count_result.scalar()
+            
+            # 添加排序、分页
+            query = query.order_by(Resume.created_at.desc()).offset(offset).limit(limit)
+            
+            result = await self.db.execute(query)
+            resumes = result.scalars().all()
+            
+            # 转换为字典格式
+            resume_list = []
+            for resume in resumes:
+                resume_dict = {
+                    "id": str(resume.id),
+                    "filename": resume.filename,
+                    "content_type": resume.content_type,
+                    "file_size": getattr(resume, 'file_size', None),
+                    "created_at": resume.created_at.isoformat() if resume.created_at else None,
+                    "updated_at": resume.updated_at.isoformat() if resume.updated_at else None,
+                    # 可以添加内容预览（截取前100个字符）
+                    "content_preview": resume.content[:100] + "..." if resume.content and len(resume.content) > 100 else resume.content
+                }
+                resume_list.append(resume_dict)
+            
+            return resume_list, total_count
+            
+        except Exception as e:
+            logger.error(f"Error fetching resume list: {str(e)}")
+            raise e

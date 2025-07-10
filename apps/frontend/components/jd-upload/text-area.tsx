@@ -104,7 +104,7 @@ export default function JobDescriptionUploadTextArea() {
 					required
 					aria-required="true"
 					placeholder="Paste the job description here..."
-					className="w-full bg-gray-800/30 focus:ring-1 border rounded-md dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500/50 border-gray-300 min-h-[300px]"
+					className="w-full bg-gray-800/30 focus:ring-1 border rounded-md dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500/50 border-gray-300 min-h-[300px] text-white"
 				/>
 			</div>
 

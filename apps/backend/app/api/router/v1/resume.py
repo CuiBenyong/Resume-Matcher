@@ -85,6 +85,7 @@ async def upload_resume(
         "message": f"File {file.filename} successfully processed as MD and stored in the DB",
         "request_id": request_id,
         "resume_id": resume_id,
+        "status": "success",
     }
 
 
@@ -232,3 +233,76 @@ async def get_resume(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Error fetching resume data",
         )
+
+
+@resume_router.get(
+    "/list",
+    summary="Get list of uploaded resumes",
+)
+async def get_resume_list(
+    request: Request,
+    page: int = Query(1, ge=1, description="Page number (starting from 1)"),
+    page_size: int = Query(10, ge=1, le=100, description="Number of items per page"),
+    search: str = Query(None, description="Search by filename or content"),
+    db: AsyncSession = Depends(get_db_session),
+):
+    """
+    Retrieves a paginated list of uploaded resumes.
+
+    Args:
+        page: Page number (starting from 1)
+        page_size: Number of items per page (1-100)
+        search: Optional search term to filter by filename or content
+
+    Returns:
+        Paginated list of resumes with metadata
+
+    Raises:
+        HTTPException: If there's an error fetching the resume list.
+    """
+    request_id = getattr(request.state, "request_id", str(uuid4()))
+    headers = {"X-Request-ID": request_id}
+
+    try:
+        resume_service = ResumeService(db)
+        
+        # 计算偏移量
+        offset = (page - 1) * page_size
+        
+        # 获取简历列表和总数
+        resumes, total_count = await resume_service.get_resume_list(
+            offset=offset,
+            limit=page_size,
+            search=search
+        )
+        
+        # 计算分页信息
+        total_pages = (total_count + page_size - 1) // page_size
+        has_next = page < total_pages
+        has_prev = page > 1
+        
+        return JSONResponse(
+            content={
+                "request_id": request_id,
+                "data": {
+                    "resumes": resumes,
+                    "pagination": {
+                        "current_page": page,
+                        "page_size": page_size,
+                        "total_count": total_count,
+                        "total_pages": total_pages,
+                        "has_next": has_next,
+                        "has_prev": has_prev
+                    }
+                },
+            },
+            headers=headers,
+        )
+        
+    except Exception as e:
+        logger.error(f"Error fetching resume list: {str(e)} - traceback: {traceback.format_exc()}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error fetching resume list",
+        )
+

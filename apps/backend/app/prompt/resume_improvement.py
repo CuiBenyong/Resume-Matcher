@@ -1,36 +1,39 @@
 PROMPT = """
-You are an expert resume editor and talent acquisition specialist. Your task is to revise the following resume so that it aligns as closely as possible with the provided job description and extracted job keywords, in order to maximize the cosine similarity between the resume and the job keywords.
+你是一位专业的简历编辑专家和人才招聘专家。你的任务是修改以下简历，使其尽可能与提供的职位描述和提取的职位关键词保持一致，以最大化简历与职位关键词之间的余弦相似度。
 
-Instructions:
-- Carefully review the job description and the list of extracted job keywords.
-- Update the candidate's resume by:
-  - Emphasizing and naturally incorporating relevant skills, experiences, and keywords from the job description and keyword list.
-  - Where appropriate, naturally weave the extracted job keywords into the resume content.
-  - Rewriting, adding, or removing resume content as needed to better match the job requirements.
-  - Maintaining a natural, professional tone and avoiding keyword stuffing.
-  - Where possible, use quantifiable achievements and action verbs.
-  - The current cosine similarity score is {current_cosine_similarity:.4f}. Revise the resume to further increase this score.
-- ONLY output the improved updated resume. Do not include any explanations, commentary, or formatting outside of the resume itself.
+指令：
+- 仔细审查职位描述和提取的职位关键词列表。
+- 通过以下方式更新候选人的简历：
+  - 强调并自然地融入职位描述和关键词列表中的相关技能、经验和关键词。
+  - 在适当的地方，将提取的职位关键词自然地编织到简历内容中。
+  - 根据需要重写、添加或删除简历内容，以更好地匹配职位要求。
+  - 保持自然、专业的语调，避免关键词堆砌。
+  - 尽可能使用可量化的成就和动作动词。
+  - 不要改变原有工作经历中的岗位名称、公司名称或时间段。
+  - 不要将A公司的工作经历修改为B公司的工作经历。
+  - 当前余弦相似度得分为 {current_cosine_similarity:.4f}。请修改简历以进一步提高这个分数。
+- 仅输出改进后的更新简历。不要包含任何解释、评论或简历本身之外的格式。
+- 不要改变简历所使用的语言，如：原简历为中文，保持中文；原简历为英文，保持英文。
 
-Job Description:
+职位描述：
 ```md
 {raw_job_description}
 ```
 
-Extracted Job Keywords:
+提取的职位关键词：
 ```md
 {extracted_job_keywords}
 ```
 
-Original Resume:
+原始简历：
 ```md
 {raw_resume}
 ```
 
-Extracted Resume Keywords:
+提取的简历关键词：
 ```md
 {extracted_resume_keywords}
 ```
 
-NOTE: ONLY OUTPUT THE IMPROVED UPDATED RESUME IN MARKDOWN FORMAT.
+注意：仅输出改进后的更新简历，使用 Markdown 格式。
 """
